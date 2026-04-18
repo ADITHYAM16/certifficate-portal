@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate Portal | Dept of AI&DS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top-header">
+    <div class="college-brand">
+        <div class="badge-icon"><img src="certificates/logo.jpg" alt="MEC Logo" class="college-logo"></div>
+        <div class="college-info">
+            <h1 class="college-title">MAHENDRA ENGINEERING COLLEGE (AUTONOMOUS)</h1>
+            <div class="department">Department of Artificial Intelligence &amp; Data Science</div>
+        </div>
+        <div class="badge-icon"><img src="Picsart_26-02-01_19-40-52-424.png" alt="AI Nexus Logo" class="college-logo"></div>
+    </div>
+</header>
+
+<main class="main-content">
+    <a class="back-link" href="index.html">← Back to Events</a>
+
+    <div class="search-card">
+        <h2 id="eventTitle">Retrieve Your Certificate</h2>
+        <p class="card-subtitle" id="eventSubtitle"></p>
+
+        <div class="input-wrapper">
+            <span class="input-icon">🔍</span>
+            <input type="text" id="certInput" placeholder="" onkeydown="handleKeyPress(event)">
+        </div>
+
+        <button class="primary-btn find-btn" onclick="showCertificate()">✨ Find My Certificate ✨</button>
+
+        <p id="result" class="status-text"></p>
+
+        <div id="previewBox" style="display:none;">
+            <h3 class="preview-title">Woohoo! Here is your Certificate! 🎉</h3>
+            <img id="certificateImage" src="" class="certificate-preview-img" alt="Certificate Preview">
+            <button class="primary-btn download-btn" onclick="downloadAsPNG()">Download &amp; Celebrate!</button>
+        </div>
+
+        <div class="guide-box" id="guideBox">
+            <div class="guide-title" id="guideTitle"></div>
+            <p id="guideText"></p>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div>Developed By – M.ADITHYA | Dept of AI &amp; Data Science</div>
+    <div>Contact – m.adithyaoff@gmail.com | 8508372430</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
