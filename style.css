@@ -141,8 +141,8 @@ h1.college-title .autonomous-text {
 
 /* Main Content */
 .main-content {
-    max-width: 800px;
-    margin: 15px auto;
+    max-width: 1100px;
+    margin: 6px auto;
     padding: 0 5%;
 }
 
@@ -241,6 +241,15 @@ h1.college-title .autonomous-text {
     color: var(--text-muted);
     font-size: 13px;
     font-weight: 700;
+    display: block;
+}
+
+.event-organizers {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9f7aea;
+    display: block;
+    margin-top: 3px;
 }
 
 .event-arrow {
@@ -278,11 +287,117 @@ h1.college-title .autonomous-text {
 .color-green:hover .event-arrow { color: var(--clr-green); }
 .color-green:hover h3 { color: var(--clr-green); }
 
+/* Winners Section */
+.winners-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 14px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.winners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.winner-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    border: 1.5px solid transparent;
+    text-align: left;
+}
+
+.winner-row.place-1 { background: #fffde7; border-color: #f6c90e; }
+.winner-row.place-2 { background: #f5f5f5; border-color: #b0bec5; }
+.winner-row.place-3 { background: #fbe9e7; border-color: #d4956a; }
+
+.winner-medal {
+    font-size: 22px;
+    width: 34px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.winner-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #666;
+    width: 80px;
+    flex-shrink: 0;
+    padding-left: 8px;
+}
+
+.winner-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a202c;
+    flex: 1;
+    padding-left: 10px;
+    border-left: 2px solid #e2e8f0;
+}
+
+.winner-year {
+    font-size: 11px;
+    font-weight: 600;
+    color: #718096;
+    background: #edf2f7;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.organizers-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #f0fff4, #e6fffa);
+    border: 1.5px solid #9ae6b4;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.organizers-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #276749;
+}
+
+.organizers-names {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.winners-divider {
+    border: none;
+    border-top: 2px dashed #e2e8f0;
+    margin: 6px 0 22px 0;
+}
+
 /* Search Card */
 .search-card {
     background: #fff;
     border-radius: 30px;
-    padding: 40px;
+    padding: 10px 40px 40px 40px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     text-align: center;
     position: relative;
@@ -298,7 +413,7 @@ h1.college-title .autonomous-text {
 }
 .card-subtitle {
     font-size: 16px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     color: var(--text-muted);
 }
 
@@ -309,7 +424,7 @@ h1.college-title .autonomous-text {
     border: 2px solid #2d3748;
     border-radius: 16px;
     padding: 10px 20px;
-    margin: 0 auto 25px auto;
+    margin: 0 auto 14px auto;
     max-width: 500px;
     transition: all 0.3s ease;
 }
@@ -407,9 +522,9 @@ h1.college-title .autonomous-text {
     display: inline-block;
     color: #fff;
     background: rgba(0,0,0,0.2);
-    padding: 8px 20px;
+    padding: 6px 18px;
     border-radius: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
@@ -440,7 +555,12 @@ h1.college-title .autonomous-text {
     h1.college-title .autonomous-text { font-size: 9px !important; margin-top: 2px !important; }
     .department { font-size: clamp(8px, 2.2vw, 11px); }
     .badge-icon { width: 45px; height: 45px; min-width: 45px; min-height: 45px; }
+    .cert-layout { flex-direction: column; }
+    .winners-panel { flex: unset; width: 100%; }
     .search-card { padding: 30px 20px; }
     .event-card { flex-direction: column; text-align: center; }
     .event-arrow { display: none; }
+    .winner-label { width: 64px; font-size: 11px; }
+    .winner-name { font-size: 13px; }
+    .winner-year { font-size: 10px; padding: 2px 8px; }
 }

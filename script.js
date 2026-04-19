@@ -1,3 +1,37 @@
+// ── Winners data ──────────────────────────────────────────────
+const WINNERS = {
+    'logo-design': {
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Dharshini V',       year: 'II Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Jessikabarathi B',  year: 'II Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Deepak Balajee R',  year: 'II Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Vignesh P',         year: 'IV Year' }
+        ],
+        organizers: ['M. Adithya', 'K. Ganeshwar']
+    },
+    'technical-seminar': {
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Navaneetham S',        year: 'II Year' },
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Jayasree R',            year: 'II Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Manigandan A G',        year: 'II Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Sujay Chidambaram C S', year: 'II Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Janashree R',           year: 'II Year' }
+        ],
+        organizers: []
+    },
+    'technical-quiz': {
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Pavithra N',       year: 'II Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Cathanishagnel R',  year: 'II Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Adhithiya V',       year: 'II Year' },
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Mohanraj K',        year: 'III Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Mothishwaran',      year: 'III Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Saravanakumar',     year: 'III Year' }
+        ],
+        organizers: []
+    }
+};
+
 // ── Event config ──────────────────────────────────────────────
 const EVENTS = {
     'logo-design': {
@@ -87,10 +121,27 @@ function initCertificatePage() {
 
     document.getElementById('eventTitle').textContent = event.name;
 
+    // Render winners if available for this event
+    const winners = WINNERS[eventId];
+    if (winners) {
+        const list = document.getElementById('winnersList');
+        list.innerHTML = winners.winners.map(w =>
+            `<div class="winner-row place-${w.place}">
+                <span class="winner-medal">${w.medal}</span>
+                <span class="winner-label">${w.label}</span>
+                <span class="winner-name">${w.name}</span>
+                <span class="winner-year">${w.year}</span>
+            </div>`
+        ).join('');
+        if (winners.organizers) {
+        }
+        document.getElementById('winnersSection').style.display = 'block';
+    }
+
     const input = document.getElementById('certInput');
 
     if (event.inputType === 'register') {
-        input.placeholder = 'Enter your 13-digit number';
+        input.placeholder = 'Enter your register number';
         input.setAttribute('inputmode', 'numeric');
         input.setAttribute('maxlength', '13');
         input.setAttribute('pattern', '[0-9]{13}');
@@ -144,7 +195,8 @@ function showCertificate() {
         img.dataset.fileName = fileName;
         previewBox.style.display = 'block';
         result.textContent = '';
-        fireConfetti(); // Fire confetti on showing certificate!
+        fireConfetti();
+        previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     img.onerror = function () {
