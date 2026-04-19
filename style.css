@@ -48,13 +48,21 @@ h1, h2, h3, .college-title, .guide-title, .preview-title {
 }
 
 h1.college-title {
-    font-size: 48px;
+    font-size: clamp(24px, 4.5vw, 48px);
     letter-spacing: 0.5px;
     color: #800000;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.autonomous-text {
+    font-size: 24px;
+    color: #2d3748;
+    font-weight: 600;
 }
 
 .department {
-    font-size: 28px;
+    font-size: 32px;
     color: #000;
     font-weight: 600;
     margin-top: 5px;
@@ -79,13 +87,14 @@ h1.college-title {
     align-items: center;
     justify-content: center;
     gap: 20px;
+    width: 100%;
 }
 
 .college-info {
     padding: 15px 25px;
     text-align: center;
     width: 100%;
-    max-width: 700px;
+    max-width: 900px;
 }
 
 .logos-row {
@@ -422,11 +431,13 @@ h1.college-title {
 }
 
 @media (max-width: 768px) {
-    .college-info { padding: 10px 15px; }
+    .college-brand { gap: 8px; width: 100%; justify-content: center; }
+    .college-info { padding: 5px; flex: 1; overflow: hidden; }
     .logos-row { gap: 8px; }
-    h1.college-title { font-size: 13px; }
-    .department { font-size: 10px; }
-    .badge-icon { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
+    h1.college-title { font-size: clamp(11px, 3.2vw, 16px); white-space: nowrap; }
+    .autonomous-text { font-size: 9px; }
+    .department { font-size: clamp(8px, 2.2vw, 11px); }
+    .badge-icon { width: 45px; height: 45px; min-width: 45px; min-height: 45px; }
     .search-card { padding: 30px 20px; }
     .event-card { flex-direction: column; text-align: center; }
     .event-arrow { display: none; }
