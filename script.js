@@ -29,6 +29,22 @@ const WINNERS = {
             { place: 3, medal: '🥉', label: '3rd Place', name: 'Saravanakumar',     year: 'III Year' }
         ],
         organizers: []
+    },
+    'mind-meets-machine': {
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Aathi E',            year: 'III Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Adithya M',          year: 'II Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Pola Kowshik Saran', year: 'III Year' }
+        ],
+        organizers: []
+    },
+    'code-relay': {
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Koushikraj J & Team', year: 'I Year' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Akash V & Team',      year: 'II Year' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Peetham P & Team',    year: 'III Year' }
+        ],
+        organizers: []
     }
 };
 
@@ -71,34 +87,15 @@ function fireConfetti() {
     if (typeof confetti !== 'undefined') {
         var duration = 3 * 1000;
         var end = Date.now() + duration;
-
         (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: ['#ff0000', '#00ff00', '#0000ff', '#f093fb', '#f5576c']
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#ff0000', '#00ff00', '#0000ff', '#f093fb', '#f5576c']
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
+            confetti({ particleCount: 5, angle: 60,  spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#00ff00', '#0000ff', '#f093fb', '#f5576c'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#00ff00', '#0000ff', '#f093fb', '#f5576c'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
         }());
     }
 }
 
-// Fire confetti on page load excitement
-window.addEventListener('load', () => {
-    fireConfetti();
-});
+window.addEventListener('load', () => { fireConfetti(); });
 
 // ── Main page: navigate to certificate page ────────────────────
 function selectEvent(eventId, event) {
@@ -111,17 +108,11 @@ function initCertificatePage() {
     const eventId = params.get('event');
     const event = EVENTS[eventId];
 
-    if (!event) {
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!event) { window.location.href = 'index.html'; return; }
 
-    // Store current event id for use in showCertificate
     window._currentEvent = eventId;
-
     document.getElementById('eventTitle').textContent = event.name;
 
-    // Render winners if available for this event
     const winners = WINNERS[eventId];
     if (winners) {
         const list = document.getElementById('winnersList');
@@ -133,32 +124,16 @@ function initCertificatePage() {
                 <span class="winner-year">${w.year}</span>
             </div>`
         ).join('');
-        if (winners.organizers) {
-        }
         document.getElementById('winnersSection').style.display = 'block';
     }
 
     const input = document.getElementById('certInput');
-
-    if (event.inputType === 'register') {
-        input.placeholder = 'Enter your register number';
-        input.setAttribute('inputmode', 'numeric');
-        input.setAttribute('maxlength', '13');
-        input.setAttribute('pattern', '[0-9]{13}');
-        document.getElementById('eventSubtitle').textContent =
-            'Enter your 13-digit college register number to retrieve your certificate.';
-        document.getElementById('guideTitle').textContent = 'Register Number Format';
-        document.getElementById('guideText').textContent =
-            'Enter your 13-digit register number (e.g., 6113242431005).';
-    } else {
-        input.placeholder = 'Enter your name with initials';
-        input.setAttribute('autocomplete', 'name');
-        document.getElementById('eventSubtitle').textContent =
-            'Enter your name exactly as registered (with initials).';
-        document.getElementById('guideTitle').textContent = 'Name Format Guide';
-        document.getElementById('guideText').textContent =
-            'Enter your name with initials exactly as submitted (e.g., S.KUMAR or A.B.PRIYA).';
-    }
+    input.placeholder = 'Enter your register number';
+    input.setAttribute('inputmode', 'numeric');
+    input.setAttribute('maxlength', '13');
+    input.setAttribute('pattern', '[0-9]{13}');
+    document.getElementById('eventSubtitle').textContent =
+        'Enter your 13-digit college register number to retrieve your certificate.';
 }
 
 // ── Lookup certificate ─────────────────────────────────────────
@@ -171,28 +146,22 @@ function showCertificate() {
     const img = document.getElementById('certificateImage');
 
     if (!value) {
-        result.textContent = event.inputType === 'register'
-            ? 'Please enter your register number. 🧐'
-            : 'Please enter your name with initials. 🧐';
+        result.textContent = 'Please enter your register number. 🧐';
         previewBox.style.display = 'none';
         return;
     }
 
-    if (event.inputType === 'register' && !/^\d{13}$/.test(value)) {
+    if (!/^\d{13}$/.test(value)) {
         result.textContent = 'Whoops! Please enter a valid 13-digit register number.';
         previewBox.style.display = 'none';
         return;
     }
 
-    const fileName = event.inputType === 'register'
-        ? value
-        : value.toUpperCase().replace(/\s+/g, '_');
-
-    const filePath = `${event.folder}/${fileName}.png`;
+    const filePath = `${event.folder}/${value}.png`;
     result.textContent = 'Wrapping up your certificate… 🎁';
 
     img.onload = function () {
-        img.dataset.fileName = fileName;
+        img.dataset.fileName = value;
         previewBox.style.display = 'block';
         result.textContent = '';
         fireConfetti();
@@ -209,17 +178,13 @@ function showCertificate() {
 
 // ── Download as PNG ────────────────────────────────────────────
 function downloadAsPNG() {
-    // 🎉 Fire confetti when downloaded
     fireConfetti();
-    
     const img = document.getElementById('certificateImage');
     const fileName = img.dataset.fileName || 'certificate';
-
     const canvas = document.createElement('canvas');
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     canvas.getContext('2d').drawImage(img, 0, 0);
-
     const link = document.createElement('a');
     link.download = `Certificate_${fileName}.png`;
     link.href = canvas.toDataURL('image/png');
