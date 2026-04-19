@@ -3,31 +3,31 @@ const EVENTS = {
     'logo-design': {
         name: 'Logo Design Competition',
         date: '23 December 2025',
-        inputType: 'register',   // uses 13-digit register number
+        inputType: 'register',
         folder: 'certificates/logo-design'
     },
     'technical-seminar': {
         name: 'Technical Seminar',
-        date: 'Coming Soon',
-        inputType: 'name',
+        date: '30 December 2025',
+        inputType: 'register',
         folder: 'certificates/technical-seminar'
     },
     'technical-quiz': {
         name: 'Technical Quiz',
-        date: 'Coming Soon',
-        inputType: 'name',
+        date: '7 January 2026',
+        inputType: 'register',
         folder: 'certificates/technical-quiz'
     },
     'mind-meets-machine': {
         name: 'Mind Meets Machine',
         date: 'Coming Soon',
-        inputType: 'name',
+        inputType: 'register',
         folder: 'certificates/mind-meets-machine'
     },
     'code-relay': {
         name: 'Code Relay 2k26',
         date: 'Coming Soon',
-        inputType: 'name',
+        inputType: 'register',
         folder: 'certificates/code-relay'
     }
 };
