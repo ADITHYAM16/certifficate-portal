@@ -2,7 +2,7 @@
 const WINNERS = {
     'ideathon-2k26': {
         winners: [],
-        organizers: ['RAGAVI P', 'JEEVANANTHAM K', 'NANDHA KUMARAN N', 'THIVYAA K S', 'KAMALESH', 'KALAI PRIYAN', 'VAISHNAVI R']
+        organizers: ['RAGAVI P', 'JEEVANANTHAM K', 'NANDHA KUMARAN N', 'THIVYAA K S', 'KAMALESH S', 'KALAI PRIYAN', 'VAISHNAVI R']
     },
     'logo-design': {
         winners: [
