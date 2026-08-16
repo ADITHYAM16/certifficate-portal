@@ -9,9 +9,11 @@
     
     /* Vibrant Event Colors */
     --clr-purple: #9f7aea;
+    --clr-dark-purple: #553c9a;
     --clr-orange: #ed8936;
     --clr-pink: #ed64a6;
     --clr-blue: #4299e1;
+    --clr-dark-blue: #2b6cb0;
     --clr-green: #48bb78;
 }
 
@@ -195,9 +197,11 @@ h1.college-title .autonomous-text {
 }
 
 .color-purple:hover { background: linear-gradient(135deg, #f3e8ff, #fff); border-left-color: var(--clr-purple); }
+.color-dark-purple:hover { background: linear-gradient(135deg, #faf5ff, #fff); border-left-color: var(--clr-dark-purple); }
 .color-orange:hover { background: linear-gradient(135deg, #fff3e0, #fff); border-left-color: var(--clr-orange); }
 .color-pink:hover   { background: linear-gradient(135deg, #ffe4f0, #fff); border-left-color: var(--clr-pink); }
 .color-blue:hover   { background: linear-gradient(135deg, #e8f4ff, #fff); border-left-color: var(--clr-blue); }
+.color-dark-blue:hover { background: linear-gradient(135deg, #ebf8ff, #fff); border-left-color: var(--clr-dark-blue); }
 .color-green:hover  { background: linear-gradient(135deg, #e8fff0, #fff); border-left-color: var(--clr-green); }
 
 .event-icon {
@@ -281,6 +285,19 @@ h1.college-title .autonomous-text {
 .color-blue .progress-fill { background: var(--clr-blue); }
 .color-blue:hover .event-arrow { color: var(--clr-blue); }
 .color-blue:hover h3 { color: var(--clr-blue); }
+.color-blue .event-organizers { color: var(--clr-blue); }
+
+.color-dark-blue { border-color: var(--clr-dark-blue); }
+.color-dark-blue .progress-fill { background: var(--clr-dark-blue); }
+.color-dark-blue:hover .event-arrow { color: var(--clr-dark-blue); }
+.color-dark-blue:hover h3 { color: var(--clr-dark-blue); }
+.color-dark-blue .event-organizers { color: var(--clr-dark-blue); }
+
+.color-dark-purple { border-color: var(--clr-dark-purple); }
+.color-dark-purple .progress-fill { background: var(--clr-dark-purple); }
+.color-dark-purple:hover .event-arrow { color: var(--clr-dark-purple); }
+.color-dark-purple:hover h3 { color: var(--clr-dark-purple); }
+.color-dark-purple .event-organizers { color: var(--clr-dark-purple); }
 
 .color-green { border-color: var(--clr-green); }
 .color-green .progress-fill { background: var(--clr-green); }

@@ -1,5 +1,9 @@
 // ── Winners data ──────────────────────────────────────────────
 const WINNERS = {
+    'ideathon-2k26': {
+        winners: [],
+        organizers: ['RAGAVI P', 'JEEVANANTHAM K', 'NANDHA KUMARAN N', 'THIVYAA K S', 'KAMALESH', 'KALAI PRIYAN', 'VAISHNAVI R']
+    },
     'logo-design': {
         winners: [
             { place: 1, medal: '🥇', label: '1st Place', name: 'Dharshini V',       year: 'II Year' },
@@ -50,6 +54,12 @@ const WINNERS = {
 
 // ── Event config ──────────────────────────────────────────────
 const EVENTS = {
+    'ideathon-2k26': {
+        name: 'IDEATHON-2K26',
+        date: '19 August 2026',
+        inputType: 'register',
+        folder: 'certificates/ideathon-2k26'
+    },
     'logo-design': {
         name: 'Logo Design Competition',
         date: '23 December 2025',
