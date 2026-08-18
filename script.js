@@ -58,7 +58,7 @@ const EVENTS = {
         name: 'IDEATHON-2K26',
         date: '19 August 2026',
         inputType: 'register',
-        folder: 'certificates/ideathon-2k26'
+        folder: 'certificates/Ideathon-2k26'
     },
     'logo-design': {
         name: 'Logo Design Competition',
