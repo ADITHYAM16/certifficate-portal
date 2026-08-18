@@ -1,6 +1,193 @@
 /* ========== MAHENDRA ENGINEERING COLLEGE - CERTIFICATE PORTAL ========== */
 /* Fun & Energetic Celebration Theme */
 
+/* Intro Animation Overlay */
+#intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0616; /* Deep dark background */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: fadeOutIntro 1s ease-in-out 6s forwards;
+    overflow: hidden;
+}
+
+/* Background animated elements */
+.intro-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.6;
+    z-index: 1;
+    animation: floatBg 8s infinite alternate ease-in-out;
+}
+
+.circle-1 {
+    width: 35vw;
+    height: 35vw;
+    background: #8e2de2;
+    top: -10%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 40vw;
+    height: 40vw;
+    background: #4a00e0;
+    bottom: -15%;
+    right: -10%;
+    animation-delay: -2s;
+}
+
+.circle-3 {
+    width: 25vw;
+    height: 25vw;
+    background: #f093fb;
+    top: 40%;
+    left: 60%;
+    animation-delay: -4s;
+}
+
+@keyframes floatBg {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -40px) scale(1.1); }
+}
+
+.intro-content-wrapper {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(-8vh);
+}
+
+@keyframes fadeOutIntro {
+    0% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+.intro-college-title {
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(20px, 4vw, 42px);
+    text-align: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    letter-spacing: 2px;
+    animation: fadeInDown 1s ease-out 0.5s forwards;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    line-height: 1.4;
+}
+
+.intro-college-title span {
+    font-size: clamp(14px, 2.5vw, 24px);
+    font-weight: 400;
+    color: #e2e8f0;
+    letter-spacing: 4px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.intro-dept-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.intro-dept-sub {
+    font-family: 'Poppins', sans-serif;
+    color: #fbc2eb;
+    font-size: clamp(20px, 4vw, 36px);
+    font-weight: 600;
+    letter-spacing: 6px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1.2s forwards;
+    text-transform: uppercase;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.intro-handwritten {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(80px, 18vw, 180px); /* BIG FONT */
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    padding: 10px 20px;
+    line-height: 1;
+    /* Glow effect */
+    text-shadow: 0 0 10px #f093fb, 0 0 20px #f5576c, 0 0 30px #f093fb;
+    /* Animation base */
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    animation: 
+        revealText 2.5s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards,
+        pulseGlow 2s ease-in-out 4.5s infinite alternate;
+}
+
+@keyframes revealText {
+    0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+    100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+@keyframes pulseGlow {
+    from { text-shadow: 0 0 10px #f093fb, 0 0 20px #f5576c, 0 0 30px #f093fb; }
+    to { text-shadow: 0 0 20px #f093fb, 0 0 30px #f5576c, 0 0 40px #f093fb, 0 0 60px #f5576c; }
+}
+
+.intro-celebrating {
+    color: #fbc2eb;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(16px, 3.5vw, 28px);
+    font-weight: 600;
+    letter-spacing: clamp(4px, 1.5vw, 12px);
+    margin-top: 2em; /* Roughly 2 line spaces below AI&DS */
+    opacity: 0;
+    animation: fadeInCelebrate 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 2.5s forwards;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(240, 147, 251, 0.4);
+}
+
+@keyframes fadeInCelebrate {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
 :root {
     --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #fad0c4 100%);
     --card-bg: #FFFFFF;
@@ -31,6 +218,11 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    position: relative;
+    overflow-x: hidden;
 }
 
 @keyframes zoomInLoad {
@@ -146,6 +338,8 @@ h1.college-title .autonomous-text {
     max-width: 1100px;
     margin: 6px auto;
     padding: 0 5%;
+    flex: 1;
+    width: 100%;
 }
 
 .page-title {
@@ -226,6 +420,7 @@ h1.college-title .autonomous-text {
     color: #2d3748;
 }
 
+
 /* Progress-style Highlights */
 .progress-bar {
     width: 100%;
@@ -304,7 +499,6 @@ h1.college-title .autonomous-text {
 .color-green:hover .event-arrow { color: var(--clr-green); }
 .color-green:hover h3 { color: var(--clr-green); }
 
-/* Winners Section */
 .winners-title {
     font-family: 'Poppins', sans-serif;
     font-size: 18px;
@@ -427,6 +621,15 @@ h1.college-title .autonomous-text {
     background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+.ideathon-cert-title-img {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin: -30px auto -30px auto;
+    mix-blend-mode: multiply;
+    object-fit: contain;
+    object-position: center;
 }
 .card-subtitle {
     font-size: 16px;
@@ -564,6 +767,73 @@ h1.college-title .autonomous-text {
     border-top: 5px solid #f093fb;
 }
 
+/* Floating AI Background Elements */
+.floating-ai {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.floating-shape {
+    position: absolute;
+    opacity: 0.12;
+    animation: floatAI 20s infinite ease-in-out;
+    font-size: 40px;
+    color: #553c9a;
+}
+
+.floating-shape:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; animation-duration: 25s; }
+.floating-shape:nth-child(2) { top: 20%; right: 10%; animation-delay: -5s; animation-duration: 22s; font-size: 50px; }
+.floating-shape:nth-child(3) { top: 50%; left: 15%; animation-delay: -10s; animation-duration: 28s; font-size: 35px; }
+.floating-shape:nth-child(4) { top: 60%; right: 20%; animation-delay: -15s; animation-duration: 24s; font-size: 45px; }
+.floating-shape:nth-child(5) { top: 80%; left: 25%; animation-delay: -8s; animation-duration: 26s; font-size: 38px; }
+.floating-shape:nth-child(6) { top: 30%; left: 50%; animation-delay: -12s; animation-duration: 30s; font-size: 42px; }
+.floating-shape:nth-child(7) { top: 70%; right: 8%; animation-delay: -18s; animation-duration: 23s; font-size: 33px; }
+.floating-shape:nth-child(8) { top: 85%; left: 60%; animation-delay: -3s; animation-duration: 27s; font-size: 48px; }
+
+@keyframes floatAI {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    25% { transform: translateY(-40px) rotate(90deg) scale(1.1); }
+    50% { transform: translateY(-20px) rotate(180deg) scale(0.9); }
+    75% { transform: translateY(-60px) rotate(270deg) scale(1.05); }
+}
+
+.bg-ai-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(80px, 18vw, 260px);
+    font-weight: 700;
+    color: rgba(20, 10, 60, 0.35);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: -1;
+    user-select: none;
+    letter-spacing: 0.05em;
+    animation: pulseAI 6s infinite ease-in-out;
+}
+
+@keyframes pulseAI {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.9; }
+}
+
+@media (max-width: 768px) {
+    .floating-shape { font-size: 28px; opacity: 0.1; }
+    .floating-shape:nth-child(2) { font-size: 35px; }
+    .floating-shape:nth-child(4) { font-size: 32px; }
+    .floating-shape:nth-child(6) { font-size: 30px; }
+    .floating-shape:nth-child(8) { font-size: 34px; }
+    .bg-ai-text { font-size: clamp(70px, 20vw, 180px); opacity: 0.7; top: 25%; }
+}
+
 @media (max-width: 768px) {
     .college-brand { gap: 8px; width: 100%; justify-content: center; }
     .college-info { padding: 5px; flex: 1; overflow: hidden; }
@@ -575,9 +845,10 @@ h1.college-title .autonomous-text {
     .cert-layout { flex-direction: column; }
     .winners-panel { flex: unset; width: 100%; }
     .search-card { padding: 30px 20px; }
-    .event-card { flex-direction: column; text-align: center; }
+    .event-card { flex-direction: column; text-align: left; }
     .event-arrow { display: none; }
     .winner-label { width: 64px; font-size: 11px; }
     .winner-name { font-size: 13px; }
     .winner-year { font-size: 10px; padding: 2px 8px; }
+    .site-footer { padding: 16px 10px; font-size: 11px; margin-top: 30px; border-radius: 24px 24px 0 0; border-top-width: 3px; }
 }

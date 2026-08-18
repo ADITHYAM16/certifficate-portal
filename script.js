@@ -58,7 +58,7 @@ const EVENTS = {
         name: 'IDEATHON-2K26',
         date: '19 August 2026',
         inputType: 'register',
-        folder: 'certificates/Ideathon-2k26'
+        folder: 'certificates/ideathon-2k26'
     },
     'logo-design': {
         name: 'Logo Design Competition',
@@ -121,7 +121,11 @@ function initCertificatePage() {
     if (!event) { window.location.href = 'index.html'; return; }
 
     window._currentEvent = eventId;
-    document.getElementById('eventTitle').textContent = event.name;
+    if (eventId === 'ideathon-2k26') {
+        document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
+    } else {
+        document.getElementById('eventTitle').textContent = event.name;
+    }
 
     const winners = WINNERS[eventId];
     if (winners) {
@@ -163,6 +167,7 @@ function showCertificate() {
     const result = document.getElementById('result');
     const previewBox = document.getElementById('previewBox');
     const img = document.getElementById('certificateImage');
+    const loadingOverlay = document.getElementById('aiLoadingOverlay');
 
     if (!value) {
         result.textContent = 'Please enter your register number. 🧐';
@@ -176,11 +181,14 @@ function showCertificate() {
         return;
     }
 
+    if (loadingOverlay) loadingOverlay.classList.add('active');
+
     const filePath = `${event.folder}/${value}.png`;
     result.textContent = 'Wrapping up your certificate… 🎁';
 
     img.onload = function () {
         img.dataset.fileName = value;
+        if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'block';
         result.textContent = '';
         fireConfetti();
@@ -188,6 +196,7 @@ function showCertificate() {
     };
 
     img.onerror = function () {
+        if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'none';
         result.textContent = 'not found pl check again';
     };
@@ -200,25 +209,24 @@ function downloadAsPNG() {
     fireConfetti();
     const img = document.getElementById('certificateImage');
     const fileName = img.dataset.fileName || 'certificate';
-    
+    const downloadName = `Certificate_${fileName}.png`;
+
     fetch(img.src)
-        .then(response => response.blob())
+        .then(r => r.blob())
         .then(blob => {
-            const url = window.URL.createObjectURL(blob);
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.style.display = 'none';
             link.href = url;
-            link.download = `Certificate_${fileName}.png`;
+            link.download = downloadName;
             document.body.appendChild(link);
             link.click();
-            window.URL.revokeObjectURL(url);
             document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         })
         .catch(() => {
             const link = document.createElement('a');
-            link.style.display = 'none';
             link.href = img.src;
-            link.download = `Certificate_${fileName}.png`;
+            link.download = downloadName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
