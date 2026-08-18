@@ -138,12 +138,21 @@ function initCertificatePage() {
     }
 
     const input = document.getElementById('certInput');
-    input.placeholder = 'Enter your register number';
-    input.setAttribute('inputmode', 'numeric');
-    input.setAttribute('maxlength', '13');
-    input.setAttribute('pattern', '[0-9]{13}');
-    document.getElementById('eventSubtitle').textContent =
-        'Enter your 13-digit college register number to retrieve your certificate.';
+    if (eventId === 'ideathon-2k26') {
+        input.placeholder = 'Enter your register number(s)';
+        input.removeAttribute('inputmode');
+        input.removeAttribute('maxlength');
+        input.removeAttribute('pattern');
+        document.getElementById('eventSubtitle').textContent =
+            'Enter your register number(s) to retrieve your certificate.';
+    } else {
+        input.placeholder = 'Enter your register number';
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('maxlength', '13');
+        input.setAttribute('pattern', '[0-9]{13}');
+        document.getElementById('eventSubtitle').textContent =
+            'Enter your 13-digit college register number to retrieve your certificate.';
+    }
 }
 
 // ── Lookup certificate ─────────────────────────────────────────
@@ -161,7 +170,7 @@ function showCertificate() {
         return;
     }
 
-    if (!/^\d{13}$/.test(value)) {
+    if (eventId !== 'ideathon-2k26' && !/^\d{13}$/.test(value)) {
         result.textContent = 'Whoops! Please enter a valid 13-digit register number.';
         previewBox.style.display = 'none';
         return;
@@ -180,7 +189,7 @@ function showCertificate() {
 
     img.onerror = function () {
         previewBox.style.display = 'none';
-        result.textContent = 'Certificate not found. Please double-check your details! 🤔';
+        result.textContent = 'not found pl check again';
     };
 
     img.src = filePath;
@@ -191,14 +200,29 @@ function downloadAsPNG() {
     fireConfetti();
     const img = document.getElementById('certificateImage');
     const fileName = img.dataset.fileName || 'certificate';
-    const canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    canvas.getContext('2d').drawImage(img, 0, 0);
-    const link = document.createElement('a');
-    link.download = `Certificate_${fileName}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    
+    fetch(img.src)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = url;
+            link.download = `Certificate_${fileName}.png`;
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        })
+        .catch(() => {
+            const link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = img.src;
+            link.download = `Certificate_${fileName}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 }
 
 // ── Enter key support ──────────────────────────────────────────
