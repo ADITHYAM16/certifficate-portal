@@ -206,7 +206,6 @@ function showCertificate() {
 
 // ── Download as PNG ────────────────────────────────────────────
 function downloadAsPNG() {
-    fireConfetti();
     const img = document.getElementById('certificateImage');
     const fileName = img.dataset.fileName || 'certificate';
     const downloadName = `Certificate_${fileName}.png`;
