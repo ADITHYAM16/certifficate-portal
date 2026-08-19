@@ -201,6 +201,11 @@ function showCertificate() {
     };
 
     img.onerror = function () {
+        // Try capital-I folder as fallback for case-sensitive servers
+        if (img.src.includes('ideathon-2k26') && !img.src.includes('Ideathon-2k26')) {
+            img.src = `certificates/Ideathon-2k26/${value}.png`;
+            return;
+        }
         if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'none';
         result.textContent = 'Certificate not found. Please double-check your details! 🤔';
