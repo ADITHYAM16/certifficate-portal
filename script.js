@@ -1,8 +1,12 @@
 // ── Winners data ──────────────────────────────────────────────
 const WINNERS = {
     'ideathon-2k26': {
-        winners: [],
-        organizers: ['RAGAVI P', 'JEEVANANTHAM K', 'NANDHA KUMARAN N', 'THIVYAA K S', 'KAMALESH S', 'KALAI PRIYAN', 'VAISHNAVI R']
+        winners: [
+            { place: 1, medal: '🥇', label: '1st Place', name: 'Team Fresher', year: '' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Team Zeroqn',  year: '' },
+            { place: 3, medal: '🥉', label: '3rd Place', name: 'Zenith',       year: '' }
+        ],
+        organizers: []
     },
     'logo-design': {
         winners: [
@@ -58,7 +62,7 @@ const EVENTS = {
         name: 'IDEATHON-2K26',
         date: '19 August 2026',
         inputType: 'register',
-        folder: 'certificates/Ideathon-2k26'
+        folder: 'certificates/ideathon-2k26'
     },
     'logo-design': {
         name: 'Logo Design Competition',
@@ -121,6 +125,7 @@ function initCertificatePage() {
     if (!event) { window.location.href = 'index.html'; return; }
 
     window._currentEvent = eventId;
+
     if (eventId === 'ideathon-2k26') {
         document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
     } else {
@@ -128,7 +133,7 @@ function initCertificatePage() {
     }
 
     const winners = WINNERS[eventId];
-    if (winners) {
+    if (winners && winners.winners.length > 0) {
         const list = document.getElementById('winnersList');
         list.innerHTML = winners.winners.map(w =>
             `<div class="winner-row place-${w.place}">
@@ -198,7 +203,7 @@ function showCertificate() {
     img.onerror = function () {
         if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'none';
-        result.textContent = 'not found pl check again';
+        result.textContent = 'Certificate not found. Please double-check your details! 🤔';
     };
 
     img.src = filePath;
