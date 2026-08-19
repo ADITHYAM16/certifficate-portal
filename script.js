@@ -3,7 +3,7 @@ const WINNERS = {
     'ideathon-2k26': {
         winners: [
             { place: 1, medal: '🥇', label: '1st Place', name: 'Team Fresher', year: '' },
-            { place: 2, medal: '🥈', label: '2nd Place', name: 'Team Zeroqn',  year: '' },
+            { place: 2, medal: '🥈', label: '2nd Place', name: 'Team Zerqon',  year: '' },
             { place: 3, medal: '🥉', label: '3rd Place', name: 'Zenith',       year: '' }
         ],
         organizers: []
@@ -201,17 +201,32 @@ function showCertificate() {
     };
 
     img.onerror = function () {
-        // Try capital-I folder as fallback for case-sensitive servers
-        if (img.src.includes('ideathon-2k26') && !img.src.includes('Ideathon-2k26')) {
-            img.src = `certificates/Ideathon-2k26/${value}.png`;
-            return;
-        }
         if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'none';
         result.textContent = 'Certificate not found. Please double-check your details! 🤔';
     };
 
-    img.src = filePath;
+    // Try all possible folder casings for hosted servers
+    const paths = eventId === 'ideathon-2k26'
+        ? [`certificates/ideathon-2k26/${value}.png`,
+           `certificates/Ideathon-2k26/${value}.png`,
+           `certificates/IDEATHON-2K26/${value}.png`]
+        : [`${event.folder}/${value}.png`];
+    let pathIndex = 0;
+
+    img.onerror = function () {
+        pathIndex++;
+        if (pathIndex < paths.length) {
+            img.src = paths[pathIndex];
+        } else {
+            if (loadingOverlay) loadingOverlay.classList.remove('active');
+            previewBox.style.display = 'none';
+            result.textContent = 'Certificate not found. Please double-check your details! 🤔';
+        }
+    };
+
+    img.src = paths[0];
+    return;
 }
 
 // ── Download as PNG ────────────────────────────────────────────
