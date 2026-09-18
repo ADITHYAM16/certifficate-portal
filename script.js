@@ -1,5 +1,10 @@
 // ── Winners data ──────────────────────────────────────────────
 const WINNERS = {
+    'modelathon': {
+        winners: [],
+        organizers: [],
+        message: 'Will be updated on Monday'
+    },
     'ideathon-2k26': {
         winners: [
             { place: 1, medal: '🥇', label: '1st Place', name: 'Team Fresher', year: '' },
@@ -58,6 +63,12 @@ const WINNERS = {
 
 // ── Event config ──────────────────────────────────────────────
 const EVENTS = {
+    'modelathon': {
+        name: 'MODELATHON (INTERNAL MODE)',
+        date: '18 September 2026',
+        inputType: 'register',
+        folder: 'certificates/Modelathon'
+    },
     'ideathon-2k26': {
         name: 'IDEATHON-2K26',
         date: '19 August 2026',
@@ -128,6 +139,8 @@ function initCertificatePage() {
 
     if (eventId === 'ideathon-2k26') {
         document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
+    } else if (eventId === 'modelathon') {
+        document.getElementById('eventTitle').innerHTML = '<img src="video/model.png" alt="MODELATHON (INTERNAL MODE)" class="ideathon-cert-title-img" style="max-width: 100%; height: auto;">';
     } else {
         document.getElementById('eventTitle').textContent = event.name;
     }
@@ -144,6 +157,10 @@ function initCertificatePage() {
             </div>`
         ).join('');
         document.getElementById('winnersSection').style.display = 'block';
+    } else if (winners && winners.message) {
+        const list = document.getElementById('winnersList');
+        list.innerHTML = `<div style="text-align:center; padding: 15px; font-style: italic; color: #555;">${winners.message}</div>`;
+        document.getElementById('winnersSection').style.display = 'block';
     }
 
     const input = document.getElementById('certInput');
@@ -157,10 +174,10 @@ function initCertificatePage() {
     } else {
         input.placeholder = 'Enter your register number';
         input.setAttribute('inputmode', 'numeric');
-        input.setAttribute('maxlength', '13');
-        input.setAttribute('pattern', '[0-9]{13}');
+        input.setAttribute('maxlength', '18');
+        input.setAttribute('pattern', '[0-9]{10,18}');
         document.getElementById('eventSubtitle').textContent =
-            'Enter your 13-digit college register number to retrieve your certificate.';
+            'Enter your college register number to retrieve your certificate.';
     }
 }
 
@@ -180,8 +197,8 @@ function showCertificate() {
         return;
     }
 
-    if (eventId !== 'ideathon-2k26' && !/^\d{13}$/.test(value)) {
-        result.textContent = 'Whoops! Please enter a valid 13-digit register number.';
+    if (eventId !== 'ideathon-2k26' && !/^\d{10,18}$/.test(value)) {
+        result.textContent = 'Whoops! Please enter a valid college register number.';
         previewBox.style.display = 'none';
         return;
     }
@@ -207,11 +224,16 @@ function showCertificate() {
     };
 
     // Try all possible folder casings for hosted servers
-    const paths = eventId === 'ideathon-2k26'
-        ? [`certificates/ideathon-2k26/${value}.png`,
-           `certificates/Ideathon-2k26/${value}.png`,
-           `certificates/IDEATHON-2K26/${value}.png`]
-        : [`${event.folder}/${value}.png`];
+    let paths = [`${event.folder}/${value}.png`];
+    if (eventId === 'ideathon-2k26') {
+        paths = [`certificates/ideathon-2k26/${value}.png`,
+                 `certificates/Ideathon-2k26/${value}.png`,
+                 `certificates/IDEATHON-2K26/${value}.png`];
+    } else if (eventId === 'modelathon') {
+        paths = [`certificates/Modelathon/${value}.png`,
+                 `certificates/modelathon/${value}.png`,
+                 `certificates/MODELATHON/${value}.png`];
+    }
     let pathIndex = 0;
 
     img.onerror = function () {

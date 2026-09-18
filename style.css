@@ -626,13 +626,20 @@ h1.college-title .autonomous-text {
     display: block;
     width: 100%;
     max-width: 350px;
-    margin: -30px auto -30px auto;
+    margin: -10px auto 15px auto;
     mix-blend-mode: multiply;
     object-fit: contain;
     object-position: center;
 }
+.modelathon-card-title-img {
+    max-width: 100%;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+}
 .card-subtitle {
     font-size: 16px;
+    margin-top: 10px;
     margin-bottom: 0;
     color: var(--text-muted);
 }
@@ -844,6 +851,7 @@ h1.college-title .autonomous-text {
     .winners-panel { flex: unset; width: 100%; }
     .search-card { padding: 30px 20px; }
     .event-card { flex-direction: column; text-align: left; }
+    .modelathon-card-title-img { height: 60px; max-width: 100%; width: auto; }
     .event-arrow { display: none; }
     .winner-label { width: 64px; font-size: 11px; }
     .winner-name { font-size: 13px; }
