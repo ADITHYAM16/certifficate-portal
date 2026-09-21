@@ -921,3 +921,94 @@ h1.college-title .autonomous-text {
     text-transform: uppercase;
 }
 
+/* ── AI Loading Overlay ───────────────────────────────────────── */
+.ai-loading-overlay {
+    display: none;
+    position: relative;
+    margin: 16px auto 0;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(142,45,226,0.12), rgba(74,0,224,0.10));
+    border: 1.5px solid rgba(168,85,247,0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 24px 20px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ai-loading-overlay.active {
+    display: block;
+    animation: overlayFadeIn 0.3s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.ai-loading-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Spinner ring */
+.ai-spinner {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 4px solid rgba(168,85,247,0.15);
+    border-top-color: #a855f7;
+    border-right-color: #6366f1;
+    animation: spinRing 0.85s linear infinite;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+.ai-loading-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #c084fc;
+    letter-spacing: 0.3px;
+}
+
+.ai-loading-sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    color: rgba(196,148,255,0.65);
+    letter-spacing: 0.2px;
+}
+
+/* Shimmer bar under spinner */
+.ai-loading-overlay::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    height: 2px;
+    width: 60%;
+    background: linear-gradient(90deg, transparent, #a855f7, #6366f1, transparent);
+    animation: shimmerBar 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmerBar {
+    0%   { left: -60%; }
+    100% { left: 140%; }
+}
+
+/* ── Certificate reveal animation ────────────────────────────── */
+.cert-reveal {
+    animation: certPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes certPop {
+    0%   { opacity: 0; transform: scale(0.88) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+

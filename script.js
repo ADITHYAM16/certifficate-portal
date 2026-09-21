@@ -117,6 +117,9 @@ const EVENTS = {
     }
 };
 
+// ── Detect if running via backend server or as local file ──────
+const IS_SERVED = window.location.protocol !== 'file:';
+
 // ── Confetti Function ──────────────────────────────────────────
 function fireConfetti() {
     if (typeof confetti !== 'undefined') {
@@ -166,7 +169,7 @@ function initCertificatePage() {
     window._currentEvent = eventId;
 
     if (eventId === 'fdp') {
-        document.getElementById('eventTitle').innerHTML = 'FACULTY DEVELOPMENT PROGRAMME<div style="font-size: 15px; font-weight: 600; color: #a855f7; margin-top: 8px;">ON “AI-Powered Teaching and Learning: Tools, Techniques and Applications”</div>';
+        document.getElementById('eventTitle').innerHTML = 'FACULTY DEVELOPMENT PROGRAMME<div style="font-size: 15px; font-weight: 600; color: #a855f7; margin-top: 8px;">ON "AI-Powered Teaching and Learning: Tools, Techniques and Applications"</div>';
     } else if (eventId === 'ideathon-2k26') {
         document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
     } else if (eventId === 'modelathon') {
@@ -219,10 +222,24 @@ function initCertificatePage() {
         document.getElementById('eventSubtitle').textContent =
             'Enter your college register number to retrieve your certificate.';
     }
+
+    // ── Real-time debounced search (only when served via backend) ──
+    if (IS_SERVED) {
+        let debounceTimer = null;
+        input.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            const val = input.value.trim();
+            if (val.length >= 8) {
+                debounceTimer = setTimeout(() => showCertificate(true), 350);
+            }
+        });
+    }
 }
 
-// ── Lookup certificate ─────────────────────────────────────────
-function showCertificate() {
+// ── Lookup certificate (Backend API or fallback file-guess) ────
+let _currentAbortController = null;
+
+async function showCertificate(isSilent = false) {
     const eventId = window._currentEvent;
     const event = EVENTS[eventId];
     const value = document.getElementById('certInput').value.trim();
@@ -234,32 +251,91 @@ function showCertificate() {
     const loadingOverlay = document.getElementById('aiLoadingOverlay');
 
     if (!value) {
-        if (eventId === 'fdp') {
-            result.textContent = 'Please enter the mobile number submitted in Google forms. 🧐';
-        } else {
-            result.textContent = 'Please enter your register number. 🧐';
+        if (!isSilent) {
+            if (eventId === 'fdp') {
+                result.textContent = 'Please enter the mobile number submitted in Google forms. 🧐';
+            } else {
+                result.textContent = 'Please enter your register number. 🧐';
+            }
+            previewBox.style.display = 'none';
         }
-        previewBox.style.display = 'none';
         return;
     }
 
-    if (eventId === 'fdp') {
-        if (digitsOnly.length < 8 && cleanValue.length < 8) {
-            result.textContent = 'Whoops! Please enter a valid mobile number submitted in Google forms. 📱';
+    if (!isSilent) {
+        if (eventId === 'fdp') {
+            if (digitsOnly.length < 8 && cleanValue.length < 8) {
+                result.textContent = 'Whoops! Please enter a valid mobile number submitted in Google forms. 📱';
+                previewBox.style.display = 'none';
+                return;
+            }
+        } else if (eventId !== 'ideathon-2k26' && !/^\d{10,18}$/.test(value)) {
+            result.textContent = 'Whoops! Please enter a valid college register number.';
             previewBox.style.display = 'none';
             return;
         }
-    } else if (eventId !== 'ideathon-2k26' && !/^\d{10,18}$/.test(value)) {
-        result.textContent = 'Whoops! Please enter a valid college register number.';
-        previewBox.style.display = 'none';
+    }
+
+    // Cancel any in-flight request
+    if (_currentAbortController) _currentAbortController.abort();
+    _currentAbortController = new AbortController();
+
+    if (loadingOverlay) loadingOverlay.classList.add('active');
+    if (!isSilent) result.textContent = 'Searching for your certificate… 🔍';
+
+    // ── BACKEND API PATH ───────────────────────────────────────
+    if (IS_SERVED) {
+        try {
+            const apiUrl = `/api/certificate?event=${encodeURIComponent(eventId)}&key=${encodeURIComponent(value)}`;
+            const response = await fetch(apiUrl, { signal: _currentAbortController.signal });
+            const data = await response.json();
+
+            if (loadingOverlay) loadingOverlay.classList.remove('active');
+
+            if (data.found) {
+                // Preload image then show
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    img.src = data.url;
+                    img.dataset.fileName = value;
+                    previewBox.style.display = 'block';
+                    previewBox.classList.add('cert-reveal');
+                    setTimeout(() => previewBox.classList.remove('cert-reveal'), 700);
+                    result.textContent = '';
+                    fireConfetti();
+                    previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                tempImg.onerror = () => {
+                    previewBox.style.display = 'none';
+                    result.textContent = 'Certificate not found. Please double-check your details! 🤔';
+                };
+                tempImg.src = data.url;
+            } else {
+                if (!isSilent) {
+                    previewBox.style.display = 'none';
+                    result.textContent = 'Certificate not found. Please double-check your details! 🤔';
+                }
+            }
+        } catch (err) {
+            if (err.name === 'AbortError') return; // cancelled – no-op
+            if (loadingOverlay) loadingOverlay.classList.remove('active');
+            // Network error → fall through to local fallback
+            console.warn('API unreachable, using local fallback:', err);
+            _localFallback(eventId, event, value, digitsOnly, cleanValue, result, previewBox, img);
+        }
         return;
     }
 
-    if (loadingOverlay) loadingOverlay.classList.add('active');
+    // ── LOCAL FILE FALLBACK (when opened as file://) ───────────
+    _localFallback(eventId, event, value, digitsOnly, cleanValue, result, previewBox, img);
+}
 
+// ── Local file fallback (original path-guessing approach) ──────
+function _localFallback(eventId, event, value, digitsOnly, cleanValue, result, previewBox, img) {
+    const loadingOverlay = document.getElementById('aiLoadingOverlay');
+    if (loadingOverlay) loadingOverlay.classList.add('active');
     result.textContent = 'Wrapping up your certificate… 🎁';
 
-    // Try all possible folder casings & 10 vs 11 digit variations for hosted servers
     let paths = [`${event.folder}/${value}.png`];
     if (eventId === 'fdp') {
         let tenDigits = digitsOnly;
@@ -269,29 +345,19 @@ function showCertificate() {
         } else if (digitsOnly.length === 10) {
             elevenDigits = '0' + digitsOnly;
         }
-
-        const fdpFolders = [
-            'certificates/Faaculty Developement Programme',
-            'certificates/Faculty Development Programme',
-            'certificates/fdp',
-            'certificates/FDP'
+        paths = [
+            `certificates/Faaculty Developement Programme/${digitsOnly}.png`,
+            `certificates/Faaculty Developement Programme/${value}.png`,
+            `certificates/Faaculty Developement Programme/${cleanValue}.png`,
+            `certificates/Faaculty Developement Programme/${tenDigits}.png`,
+            `certificates/Faaculty Developement Programme/${elevenDigits}.png`,
+            `certificates/Faaculty Developement Programme/${digitsOnly}.jpg`,
+            `certificates/Faaculty Developement Programme/${value}.jpg`,
+            `certificates/Faculty Development Programme/${digitsOnly}.png`,
+            `certificates/fdp/${digitsOnly}.png`,
+            `certificates/fdp/${value}.png`
         ];
-
-        paths = [];
-        const formats = [value, cleanValue, digitsOnly, tenDigits, elevenDigits];
-        const exts = ['.png', '.jpg', '.jpeg'];
-
-        fdpFolders.forEach(folder => {
-            formats.forEach(fmt => {
-                if (fmt) {
-                    exts.forEach(ext => {
-                        paths.push(`${folder}/${fmt}${ext}`);
-                    });
-                }
-            });
-        });
-
-        paths = [...new Set(paths)];
+        paths = [...new Set(paths)].filter(Boolean);
     } else if (eventId === 'ideathon-2k26') {
         paths = [`certificates/ideathon-2k26/${value}.png`,
                  `certificates/Ideathon-2k26/${value}.png`,
@@ -301,12 +367,15 @@ function showCertificate() {
                  `certificates/modelathon/${value}.png`,
                  `certificates/MODELATHON/${value}.png`];
     }
+
     let pathIndex = 0;
 
     img.onload = function () {
         img.dataset.fileName = value;
         if (loadingOverlay) loadingOverlay.classList.remove('active');
         previewBox.style.display = 'block';
+        previewBox.classList.add('cert-reveal');
+        setTimeout(() => previewBox.classList.remove('cert-reveal'), 700);
         result.textContent = '';
         fireConfetti();
         previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -324,35 +393,20 @@ function showCertificate() {
     };
 
     img.src = paths[0];
-    return;
 }
 
-// ── Download as PNG ────────────────────────────────────────────
+// ── Download as PNG (Instant 0-delay download) ─────────────────
 function downloadAsPNG() {
     const img = document.getElementById('certificateImage');
     const fileName = img.dataset.fileName || 'certificate';
     const downloadName = `Certificate_${fileName}.png`;
 
-    fetch(img.src)
-        .then(r => r.blob())
-        .then(blob => {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = downloadName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        })
-        .catch(() => {
-            const link = document.createElement('a');
-            link.href = img.src;
-            link.download = downloadName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.download = downloadName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // ── Enter key support ──────────────────────────────────────────

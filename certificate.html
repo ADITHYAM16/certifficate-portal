@@ -54,6 +54,15 @@
 
     <p id="result" class="status-text"></p>
 
+    <!-- AI Loading Overlay -->
+    <div id="aiLoadingOverlay" class="ai-loading-overlay">
+        <div class="ai-loading-inner">
+            <div class="ai-spinner"></div>
+            <div class="ai-loading-text">Retrieving your certificate…</div>
+            <div class="ai-loading-sub">Connecting to certificate server</div>
+        </div>
+    </div>
+
     <div id="previewBox" style="display:none;">
         <h3 class="preview-title">Woohoo! Here is your Certificate! 🎉</h3>
         <img id="certificateImage" src="" class="certificate-preview-img" alt="Certificate Preview">
@@ -69,6 +78,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
