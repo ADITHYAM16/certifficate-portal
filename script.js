@@ -1,5 +1,9 @@
 // ── Winners data ──────────────────────────────────────────────
 const WINNERS = {
+    'fdp': {
+        winners: [],
+        organizers: []
+    },
     'modelathon': {
         winners: [],
         organizers: [],
@@ -63,6 +67,12 @@ const WINNERS = {
 
 // ── Event config ──────────────────────────────────────────────
 const EVENTS = {
+    'fdp': {
+        name: 'FACULTY DEVELOPMENT PROGRAMME',
+        date: 'Faculty Development',
+        inputType: 'mobile',
+        folder: 'certificates/Faaculty Developement Programme'
+    },
     'modelathon': {
         name: 'MODELATHON (INTERNAL MODE)',
         date: '18 September 2026',
@@ -122,7 +132,25 @@ function fireConfetti() {
 
 window.addEventListener('load', () => { fireConfetti(); });
 
-// ── Main page: navigate to certificate page ────────────────────
+// ── Main page: filter events tab & navigate to certificate page ────────
+function filterEvents(category, btnElement) {
+    const tabs = document.querySelectorAll('.top-nav-tabs .tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+
+    const cards = document.querySelectorAll('.events-grid .event-card');
+    cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (category === 'all') {
+            card.style.display = 'flex';
+        } else if (category === 'fdp') {
+            card.style.display = cardCat === 'fdp' ? 'flex' : 'none';
+        } else if (category === 'student') {
+            card.style.display = cardCat === 'student' ? 'flex' : 'none';
+        }
+    });
+}
+
 function selectEvent(eventId, event) {
     window.location.href = `certificate.html?event=${eventId}`;
 }
@@ -137,7 +165,9 @@ function initCertificatePage() {
 
     window._currentEvent = eventId;
 
-    if (eventId === 'ideathon-2k26') {
+    if (eventId === 'fdp') {
+        document.getElementById('eventTitle').innerHTML = 'FACULTY DEVELOPMENT PROGRAMME<div style="font-size: 15px; font-weight: 600; color: #a855f7; margin-top: 8px;">ON “AI-Powered Teaching and Learning: Tools, Techniques and Applications”</div>';
+    } else if (eventId === 'ideathon-2k26') {
         document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
     } else if (eventId === 'modelathon') {
         document.getElementById('eventTitle').innerHTML = '<img src="video/model.png" alt="MODELATHON (INTERNAL MODE)" class="ideathon-cert-title-img" style="max-width: 100%; height: auto;">';
@@ -146,7 +176,7 @@ function initCertificatePage() {
     }
 
     const winners = WINNERS[eventId];
-    if (winners && winners.winners.length > 0) {
+    if (winners && winners.winners && winners.winners.length > 0) {
         const list = document.getElementById('winnersList');
         list.innerHTML = winners.winners.map(w =>
             `<div class="winner-row place-${w.place}">
@@ -161,10 +191,20 @@ function initCertificatePage() {
         const list = document.getElementById('winnersList');
         list.innerHTML = `<div style="text-align:center; padding: 15px; font-style: italic; color: #555;">${winners.message}</div>`;
         document.getElementById('winnersSection').style.display = 'block';
+    } else {
+        const winnersSec = document.getElementById('winnersSection');
+        if (winnersSec) winnersSec.style.display = 'none';
     }
 
     const input = document.getElementById('certInput');
-    if (eventId === 'ideathon-2k26') {
+    if (eventId === 'fdp') {
+        input.placeholder = 'Enter mobile number';
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('maxlength', '11');
+        input.removeAttribute('pattern');
+        document.getElementById('eventSubtitle').textContent =
+            'Enter the mobile number submitted in Google forms to retrieve certificate.';
+    } else if (eventId === 'ideathon-2k26') {
         input.placeholder = 'Enter your register number(s)';
         input.removeAttribute('inputmode');
         input.removeAttribute('maxlength');
@@ -186,18 +226,30 @@ function showCertificate() {
     const eventId = window._currentEvent;
     const event = EVENTS[eventId];
     const value = document.getElementById('certInput').value.trim();
+    const cleanValue = value.replace(/[\s\-\(\)]/g, '');
+    const digitsOnly = value.replace(/\D/g, '');
     const result = document.getElementById('result');
     const previewBox = document.getElementById('previewBox');
     const img = document.getElementById('certificateImage');
     const loadingOverlay = document.getElementById('aiLoadingOverlay');
 
     if (!value) {
-        result.textContent = 'Please enter your register number. 🧐';
+        if (eventId === 'fdp') {
+            result.textContent = 'Please enter the mobile number submitted in Google forms. 🧐';
+        } else {
+            result.textContent = 'Please enter your register number. 🧐';
+        }
         previewBox.style.display = 'none';
         return;
     }
 
-    if (eventId !== 'ideathon-2k26' && !/^\d{10,18}$/.test(value)) {
+    if (eventId === 'fdp') {
+        if (digitsOnly.length < 8 && cleanValue.length < 8) {
+            result.textContent = 'Whoops! Please enter a valid mobile number submitted in Google forms. 📱';
+            previewBox.style.display = 'none';
+            return;
+        }
+    } else if (eventId !== 'ideathon-2k26' && !/^\d{10,18}$/.test(value)) {
         result.textContent = 'Whoops! Please enter a valid college register number.';
         previewBox.style.display = 'none';
         return;
@@ -205,27 +257,42 @@ function showCertificate() {
 
     if (loadingOverlay) loadingOverlay.classList.add('active');
 
-    const filePath = `${event.folder}/${value}.png`;
     result.textContent = 'Wrapping up your certificate… 🎁';
 
-    img.onload = function () {
-        img.dataset.fileName = value;
-        if (loadingOverlay) loadingOverlay.classList.remove('active');
-        previewBox.style.display = 'block';
-        result.textContent = '';
-        fireConfetti();
-        previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    img.onerror = function () {
-        if (loadingOverlay) loadingOverlay.classList.remove('active');
-        previewBox.style.display = 'none';
-        result.textContent = 'Certificate not found. Please double-check your details! 🤔';
-    };
-
-    // Try all possible folder casings for hosted servers
+    // Try all possible folder casings & 10 vs 11 digit variations for hosted servers
     let paths = [`${event.folder}/${value}.png`];
-    if (eventId === 'ideathon-2k26') {
+    if (eventId === 'fdp') {
+        let tenDigits = digitsOnly;
+        let elevenDigits = digitsOnly;
+        if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+            tenDigits = digitsOnly.slice(1);
+        } else if (digitsOnly.length === 10) {
+            elevenDigits = '0' + digitsOnly;
+        }
+
+        const fdpFolders = [
+            'certificates/Faaculty Developement Programme',
+            'certificates/Faculty Development Programme',
+            'certificates/fdp',
+            'certificates/FDP'
+        ];
+
+        paths = [];
+        const formats = [value, cleanValue, digitsOnly, tenDigits, elevenDigits];
+        const exts = ['.png', '.jpg', '.jpeg'];
+
+        fdpFolders.forEach(folder => {
+            formats.forEach(fmt => {
+                if (fmt) {
+                    exts.forEach(ext => {
+                        paths.push(`${folder}/${fmt}${ext}`);
+                    });
+                }
+            });
+        });
+
+        paths = [...new Set(paths)];
+    } else if (eventId === 'ideathon-2k26') {
         paths = [`certificates/ideathon-2k26/${value}.png`,
                  `certificates/Ideathon-2k26/${value}.png`,
                  `certificates/IDEATHON-2K26/${value}.png`];
@@ -235,6 +302,15 @@ function showCertificate() {
                  `certificates/MODELATHON/${value}.png`];
     }
     let pathIndex = 0;
+
+    img.onload = function () {
+        img.dataset.fileName = value;
+        if (loadingOverlay) loadingOverlay.classList.remove('active');
+        previewBox.style.display = 'block';
+        result.textContent = '';
+        fireConfetti();
+        previewBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     img.onerror = function () {
         pathIndex++;
