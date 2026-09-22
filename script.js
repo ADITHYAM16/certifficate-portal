@@ -7,7 +7,8 @@ const WINNERS = {
     'modelathon': {
         winners: [],
         organizers: [],
-        message: 'Will be updated on Monday'
+        message: 'Congratulations to Top 12 Teams and other praticipants who tried their Level Best in Modelathon',
+        tagline: 'Participation is the First Step of Success'
     },
     'ideathon-2k26': {
         winners: [
@@ -192,7 +193,10 @@ function initCertificatePage() {
         document.getElementById('winnersSection').style.display = 'block';
     } else if (winners && winners.message) {
         const list = document.getElementById('winnersList');
-        list.innerHTML = `<div style="text-align:center; padding: 15px; font-style: italic; color: #555;">${winners.message}</div>`;
+        const taglineHtml = winners.tagline
+            ? `<div style="text-align:center; margin-top: 10px; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; background: linear-gradient(135deg, #f093fb, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${winners.tagline}</div>`
+            : '';
+        list.innerHTML = `<div style="text-align:center; padding: 15px 10px 5px; font-size: 16px; font-weight: 700; color: #a855f7;">${winners.message}</div>${taglineHtml}`;
         document.getElementById('winnersSection').style.display = 'block';
     } else {
         const winnersSec = document.getElementById('winnersSection');
