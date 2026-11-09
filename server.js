@@ -37,6 +37,9 @@ const EVENT_FOLDERS = {
                           'certificates/Mind-Meets-Machine'],
     'code-relay':        ['certificates/code-relay',
                           'certificates/Code-Relay'],
+    'technothon-2k26':   ['certificates/Technothon',
+                          'certificates/technothon',
+                          'certificates/TECHNOTHON'],
 };
 
 // ─── In-Memory Certificate Index ───────────────────────────────────────────

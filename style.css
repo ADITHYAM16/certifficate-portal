@@ -1012,3 +1012,19 @@ h1.college-title .autonomous-text {
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* ── Technothon card title ────────────────────────────────────── */
+.technothon-card-title {
+    margin: 0;
+    padding-bottom: 5px;
+    font-size: 1.1em;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #f093fb, #a855f7, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.technothon-card {
+}
+

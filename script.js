@@ -63,6 +63,10 @@ const WINNERS = {
             { place: 3, medal: '🥉', label: '3rd Place', name: 'Peetham P & Team',    year: 'III Year' }
         ],
         organizers: []
+    },
+    'technothon-2k26': {
+        winners: [],
+        organizers: []
     }
 };
 
@@ -115,6 +119,12 @@ const EVENTS = {
         date: 'Coming Soon',
         inputType: 'register',
         folder: 'certificates/code-relay'
+    },
+    'technothon-2k26': {
+        name: 'TECHNOTHON - 2K26',
+        date: 'Technothon 2K26',
+        inputType: 'mobile',
+        folder: 'certificates/Technothon'
     }
 };
 
@@ -175,6 +185,8 @@ function initCertificatePage() {
         document.getElementById('eventTitle').innerHTML = '<img src="fornt/ideathon fornt.jpg" alt="IDEATHON-2K26" class="ideathon-cert-title-img">';
     } else if (eventId === 'modelathon') {
         document.getElementById('eventTitle').innerHTML = '<img src="video/model.png" alt="MODELATHON (INTERNAL MODE)" class="ideathon-cert-title-img" style="max-width: 100%; height: auto;">';
+    } else if (eventId === 'technothon-2k26') {
+        document.getElementById('eventTitle').innerHTML = '<strong style="font-size: 1.5em; letter-spacing: 1px;">TECHNOTHON - 2K26</strong>';
     } else {
         document.getElementById('eventTitle').textContent = event.name;
     }
@@ -211,6 +223,13 @@ function initCertificatePage() {
         input.removeAttribute('pattern');
         document.getElementById('eventSubtitle').textContent =
             'Enter the mobile number submitted in Google forms to retrieve certificate.';
+    } else if (eventId === 'technothon-2k26') {
+        input.placeholder = 'Enter your 10-digit mobile number';
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('maxlength', '10');
+        input.setAttribute('pattern', '[0-9]{10}');
+        document.getElementById('eventSubtitle').textContent =
+            'Enter your 10-digit mobile number to retrieve your Technothon certificate.';
     } else if (eventId === 'ideathon-2k26') {
         input.placeholder = 'Enter your register number(s)';
         input.removeAttribute('inputmode');
@@ -270,6 +289,12 @@ async function showCertificate(isSilent = false) {
         if (eventId === 'fdp') {
             if (digitsOnly.length < 8 && cleanValue.length < 8) {
                 result.textContent = 'Whoops! Please enter a valid mobile number submitted in Google forms. 📱';
+                previewBox.style.display = 'none';
+                return;
+            }
+        } else if (eventId === 'technothon-2k26') {
+            if (!/^\d{10}$/.test(digitsOnly)) {
+                result.textContent = 'Whoops! Please enter a valid 10-digit mobile number. 📱';
                 previewBox.style.display = 'none';
                 return;
             }
@@ -370,6 +395,16 @@ function _localFallback(eventId, event, value, digitsOnly, cleanValue, result, p
         paths = [`certificates/Modelathon/${value}.png`,
                  `certificates/modelathon/${value}.png`,
                  `certificates/MODELATHON/${value}.png`];
+    } else if (eventId === 'technothon-2k26') {
+        paths = [
+            `certificates/Technothon/${digitsOnly}.png`,
+            `certificates/Technothon/${value}.png`,
+            `certificates/Technothon/${cleanValue}.png`,
+            `certificates/Technothon/${digitsOnly}.jpg`,
+            `certificates/technothon/${digitsOnly}.png`,
+            `certificates/TECHNOTHON/${digitsOnly}.png`
+        ];
+        paths = [...new Set(paths)].filter(Boolean);
     }
 
     let pathIndex = 0;
