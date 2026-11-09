@@ -66,7 +66,7 @@ const WINNERS = {
     },
     'technothon-2k26': {
         winners: [],
-        organizers: []
+        organizers: ['KUMARAN N', 'KAMALES BALAA A', 'ISHWARYA S', 'AAFIYA SULTHANA N', 'DHANUJA N', 'KUNAL J.S', 'GOWTHAM I', 'POORNIMA M', 'SETHU PRAKAASH RAJ S', 'VIJAY S', 'HAJEESH N.A', 'Kathirvel S']
     }
 };
 
